@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo "HOOK: commit msg "
+echo ">> $*"
+
+/usr/bin/ruby .git/hooks/commit-msg.rb "$*"

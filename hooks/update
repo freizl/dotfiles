@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# --- Command line
+refname="$1"
+oldrev="$2"
+newrev="$3"
+
+echo "==================== Hooks: update ========"
+echo ">ref name: $refname"
+echo ">old-rev: $oldrev"
+echo ">new-rev: $newrev"
+/usr/bin/ruby hooks/update.rb $refname $oldrev $newrev
+echo "==========================================="
+
+echo ">>>>>>>>>PUSH FAILED ON PURPOSE"
+exit 1

@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+
+echo "HOOK: prepare-commit-msg"
+echo ">> $*"
