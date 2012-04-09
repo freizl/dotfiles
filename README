@@ -3,3 +3,8 @@ Hello Git
 and I update it..
 
 I change something using notepad
+
+
+# tips
+- track master branch
+`git config branch.master.remote origin`
