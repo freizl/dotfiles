@@ -13,8 +13,8 @@ echo:
 
 ## | checkout projects from github
 githubclone:
+	cat gitconfig >> ~/.gitconfig
 	$(GIT) config --global user.name "Haisheng.W.WU"
-	$(GIT) config --global user.email "freizl@gmail.com"
 	cd ../ && $(GIT) clone $(GIT_SSH)/haisheng-homepage.git 
 	cd ../ && $(GIT) clone $(GIT_SSH)/freizl.github.com ../
 	cd ../ && $(GIT) clone $(GIT_SSH)/dive-into-haskell

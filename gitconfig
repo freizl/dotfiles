@@ -1,13 +1,13 @@
 [user]
 	email = freizl@gmail.com
-	name = WuHaisheng
+	name = Haisheng.W.WU
 [alias]
-        ci = commit -m
-        cia = commit -a -m
-        glog = log --graph
-        st = status
-        br = branch
-        co = checkout
+	ci = commit -m
+	cia = commit -a -m
+	glog = log --graph
+	st = status
+	br = branch
+	co = checkout
 [help]
 	autocorrect = 1
 [color]
