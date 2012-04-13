@@ -22,6 +22,7 @@ githubclone:
 	cd ../ && $(GIT) clone $(GIT_SSH)/snap-poc
 
 gitpull:
+	$(GIT) pull
 	cd ../snap-poc && $(GIT) pull
 	cd ../my-dot-emacs && $(GIT) pull
 	cd ../freizl.github.com && $(GIT) pull
@@ -29,6 +30,7 @@ gitpull:
 	cd ../dive-into-haskell && $(GIT) pull
 
 gitpush:
+	$(GIT) push
 	cd ../snap-poc && $(GIT) push
 	cd ../my-dot-emacs && $(GIT) push
 	cd ../freizl.github.com && $(GIT) push
