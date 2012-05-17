@@ -7,32 +7,39 @@ GIT_SSH=git@github.com:freizl
 GIT_HTTP=https://freizl@github.com/freizl
 
 default: echo
-
 echo:
 	echo "hello, makefile"
 
-## | checkout projects from github
+####################
+## projects
+####################
+
+projects=haisheng-homepage freizl.github.com dive-into-haskell my-dot-emacs hoauth2
+snaps=snap-poc snaplet-oauth snaplet-i18n a.haskellcn.org haskellcn.org
+
+pull1:
+	for x in $(projects) ; do \
+		cd ../$$x && $(GIT) pull ; \
+	done
+
+pull2:
+	for x in $(snaps) ; do \
+		cd ../$$x && $(GIT) pull ; \
+	done
+
+push1:
+	for x in $(projects) ; do \
+		cd ../$$x && $(GIT) push ; \
+	done
+
+push2:
+	for x in $(snaps) ; do \
+		cd ../$$x && $(GIT) push ; \
+	done
+
 githubclone:
 	cat gitconfig >> ~/.gitconfig
 	$(GIT) config --global user.name "Haisheng.W.WU"
-	cd ../ && $(GIT) clone $(GIT_SSH)/haisheng-homepage.git 
-	cd ../ && $(GIT) clone $(GIT_SSH)/freizl.github.com ../
-	cd ../ && $(GIT) clone $(GIT_SSH)/dive-into-haskell
-	cd ../ && $(GIT) clone $(GIT_SSH)/my-dot-emacs
-	cd ../ && $(GIT) clone $(GIT_SSH)/snap-poc
-
-gitpull:
-	$(GIT) pull
-	cd ../snap-poc && $(GIT) pull
-	cd ../my-dot-emacs && $(GIT) pull
-	cd ../freizl.github.com && $(GIT) pull
-	cd ../haisheng-homepage && $(GIT) pull
-	cd ../dive-into-haskell && $(GIT) pull
-
-gitpush:
-	$(GIT) push
-	cd ../snap-poc && $(GIT) push
-	cd ../my-dot-emacs && $(GIT) push
-	cd ../freizl.github.com && $(GIT) push
-	cd ../haisheng-homepage && $(GIT) push
-	cd ../dive-into-haskell && $(GIT) push
+	for x in $(snaps) ; do \
+		cd ../$$x && $(GIT) clone $(GIT_SSH)/$$(x) ; \
+	done
