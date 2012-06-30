@@ -14,7 +14,7 @@ echo:
 ## projects
 ####################
 
-projects=haisheng-homepage freizl.github.com dive-into-haskell my-dot-emacs hoauth2
+projects=haisheng-sites freizl.github.com dive-into-haskell my-dot-emacs hoauth2
 snaps=snap-poc snaplet-oauth snaplet-i18n a.haskellcn.org haskellcn.org
 
 pull1:
@@ -36,6 +36,9 @@ push2:
 	for x in $(snaps) ; do \
 		cd ../$$x && $(GIT) push ; \
 	done
+
+pullall: pull1 pull2
+pushall: push1 push2
 
 githubclone:
 	cat gitconfig >> ~/.gitconfig
