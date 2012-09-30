@@ -1,0 +1,89 @@
+/*
+
+******************************
+   C-x C-f: about:config -> conkeror.rcfile
+   M-: user_pref('conkeror.rcfile', 'c:\\sh\gh\\conkeror-rc'); RET
+   reinit
+   http://emacs-fu.blogspot.com/2010/12/conkeror-web-browsing-emacs-way.html
+******************************
+*/
+
+// require("clicks-in-new-buffer.js");
+require('session.js');
+require("favicon");
+
+session_auto_save_auto_load = true;
+add_hook("mode_line_hook", mode_line_adder(buffer_count_widget), true);
+define_key(content_buffer_normal_keymap, "d", "follow-new-buffer");
+
+/* ********** webjump ********** */
+
+add_delicious_webjumps("freizl");
+define_webjump("weibo", "http://weibo.com");
+define_webjump("douban", "http://www.douban.com");
+define_webjump("g", "http://www.google.com/search?hl=en&q=%s");
+define_webjump("tips", "http://conkeror.org/Tips");
+define_webjump("gh", "http://github.com/freizl");
+
+/* ********* proxy ********** */
+
+var proxy_server_default = "xxxx",
+    proxy_port_default = 7070;
+
+function set_proxy_session (window, enable) {
+   var server = proxy_server_default,
+       port = proxy_port_default;
+   if (enable) {
+      session_pref('network.proxy.http',   server);
+      session_pref('network.proxy.http_port',   port);
+      session_pref('network.proxy.share_proxy_settings', 'true');
+      session_pref('network.proxy.type', 1);
+      window.minibuffer.message("All protocols using "+server+":"+port+" for this session");
+   } else {
+      session_pref('network.proxy.http', '');
+      session_pref('network.proxy.http_port', 0);
+      session_pref('network.proxy.share_proxy_settings', 'false');
+      session_pref('network.proxy.type', 0);
+      window.minibuffer.message("proxy disabled");
+   }
+
+}
+
+interactive("enable-proxy",
+    "set the proxy server for all protocols for this session only",
+    function (I) { set_proxy_session(I.window, true); });
+
+interactive("disable-proxy",
+    "disable the proxy server for all protocols for this session only",
+    function (I) { set_proxy_session(I.window, false); });
+
+
+/* ********* Bookmarks ********** */
+
+// Delete Bookmarks
+interactive("delete-bookmark",
+   "Remove a bookmark",
+   function (I) {
+	  let query = nav_history_service.getNewQuery();
+	  query.setFolders( [ nav_bookmarks_service.unfiledBookmarksFolder ], 1 );
+
+	  let results = nav_history_service.executeQuery( query, nav_history_service.getNewQueryOptions() );
+
+	  const result_set_generator = function ( result_set ) {
+		 let root = result_set.root;
+		 root.containerOpen = true;
+		 for (var i = 0; i < root.childCount; i++)
+		    yield root.getChild( i );
+	  };
+
+	  let bookmark = yield I.minibuffer.read( $prompt = "Bookmark: ",
+						                      $completer = prefix_completer(
+							                     $completions = [ x for (x in result_set_generator(results)) ],
+							                     $get_string = function (n) { return n.title; },
+							                     $get_description = function (n) { return n.uri; },
+							                     $get_value = function (n) { return n.itemId; } ),
+						                      $match_required = true );
+
+	  nav_bookmarks_service.removeItem( bookmark );
+   } );
+
