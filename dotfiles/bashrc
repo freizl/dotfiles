@@ -1,0 +1,14 @@
+### alias
+
+alias rm='rm -i'
+alias cnwall='ssh haisgwu@ssh003.5bird.com -D 7070'
+alias shareDownload="sudo mount -t vboxsf Downloads /media/winshare"
+alias shareDocuments="sudo mount -t vboxsf Documents /media/winshare"
+
+alias mysynchome='rsync -r -c -a -vv -e ssh ./_site/* freizl_freizl@ssh.phx.nearlyfreespeech.net:/home/public/'
+alias E="SUDO_EDITOR=\"emacsclient -c -a emacs\" sudoedit"
+alias dmap='setxkbmap dvorak'
+
+
+########## Useful scripts
+## ifconfig eth1 [down | up]  -- restart network
