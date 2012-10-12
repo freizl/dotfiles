@@ -1,0 +1,7 @@
+[GNOME Session]
+Name=xmonad/GNOME
+RequiredComponents=gnome-settings-daemon;
+RequiredProviders=windowmanager;
+DefaultProvider-windowmanager=xmonad
+FallbackSession=ubuntu-2d
+DesktopName=Unity
