@@ -22,7 +22,7 @@ echo:
 
 init:
 	apt-get install git haskell-platform emacs make
-	# apt-get install lightdm
+	apt-get install lightdm
 
 vbox:
 	if [ ! -d "/media/cdrom"] then
@@ -49,39 +49,26 @@ xmonad:
 ## projects
 ####################
 
-freizl=haisheng-sites freizl.github.com dive-into-haskell dot-emacs hoauth2
-
-nodework=yijing
-
-pull1:
-	for x in $(projects) ; do \
-		cd ../$$x && $(GIT) pull ; \
-	done
-
-pull2:
-	for x in $(snaps) ; do \
-		cd ../$$x && $(GIT) pull ; \
-	done
+freizl=haisheng-sites freizl.github.com dive-into-haskell
+haskellcn=snaplet-oauth snaplet-i18n snap-web haskellcn
 
 push1:
-	for x in $(projects) ; do \
+	for x in $(haskellcn) ; do \
 		cd ../$$x && $(GIT) push ; \
 	done
 
-push2:
-	for x in $(snaps) ; do \
-		cd ../$$x && $(GIT) push ; \
+pull1:
+	for x in $(haskellcn) ; do \
+		cd ../$$x && $(GIT) pull ; \
 	done
-
-pullall: pull1 pull2
-pushall: push1 push2
 
 gitconfig:
 	$(GIT) config --global user.name "Haisheng.W.WU"
 
-haskellcn=snaplet-oauth snaplet-i18n snap-web haskellcn
+
 githubclone:
 	cd ../ && $(GIT) clone $(HCN_SSH)/snaplet-oauth.git
 	cd ../ && $(GIT) clone $(HCN_SSH)/snaplet-i18n.git
 	cd ../ && $(GIT) clone $(HCN_SSH)/snap-web.git
 	cd ../ && $(GIT) clone $(HCN_SSH)/haskellcn.git
+
