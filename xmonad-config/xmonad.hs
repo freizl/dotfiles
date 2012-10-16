@@ -63,7 +63,8 @@ myKeys (XConfig {modMask = myModMask}) = M.fromList $
       ((myModMask, xK_F1), spawn "google-chrome")
     , ((myModMask, xK_F2), spawn "firefox")
     , ((myModMask, xK_F3), spawn "emacs")      
-    , ((myModMask, xK_F6), spawn "nautilus")
+    , ((myModMask, xK_F4), spawn "thunar")
+    -- , ((myModMask, xK_F8), spawn "nautilus --no-desktop --browser")
 
       -- launcher keys
     , ((myModMask, xK_p), spawn "gmrun")
