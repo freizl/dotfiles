@@ -22,7 +22,8 @@ echo:
 
 init:
 	apt-get install git haskell-platform emacs make
-	apt-get install lightdm
+	apt-get install lightdm zsh
+	#apt-get install tmux
 
 vbox:
 	if [ ! -d "/media/cdrom"] then
@@ -33,7 +34,8 @@ vbox:
 
 xmonad:
 	apt-get install xmonad suckless-tools gmrun xmobar
-	apt-get install lxappearance ttf-liberation ttf-mscorefonts-installer
+	apt-get install lxappearance thunar
+	#apt-get install ttf-liberation ttf-mscorefonts-installer
 
 	cp /usr/share/xsessions/xmonad.desktop  /usr/share/xsessions/xmonad.desktop.org
 	cp $(XMONAD)/xmonad.desktop /usr/share/xsessions/
