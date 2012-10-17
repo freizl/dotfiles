@@ -1,5 +1,7 @@
 {-# LANGUAGE FlexibleContexts, Rank2Types #-}
--- My xmonad configuration file
+-- | My xmonad configuration file
+-- config template: http://www.haskell.org/haskellwiki/Xmonad/Config_archive/Template_xmonad.hs_%280.9%29
+
 module Main where
 
 import Data.Map (Map)
