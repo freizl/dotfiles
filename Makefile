@@ -22,7 +22,7 @@ echo:
 
 init:
 	apt-get install git haskell-platform emacs make
-	apt-get install lightdm zsh
+	apt-get install lightdm zsh w3m
 	#apt-get install tmux
 
 vbox:
@@ -44,7 +44,7 @@ xmonad:
 	cp $(XMONAD)/xmonad.start /usr/local/bin
 	chmod +x /usr/local/bin/xmonad.start
 	mkdir ~/.xmonad
-	cp $(XMONAD)/xmonad.hs ~/.xmonad/
+	ln -s $(XMONAD)/xmonad.hs ~/.xmonad/xmonad.hs
 	cabal install xmonad-contrib
 
 ####################
