@@ -6,26 +6,37 @@ import Data.Map (Map)
 import qualified Data.Map as M
 import Data.Monoid (appEndo)
 
+import System.IO
 import XMonad
 import XMonad.Actions.CycleWS (nextWS, prevWS, shiftToNext, shiftToPrev)
-import XMonad.Hooks.DynamicLog (dynamicLogWithPP, defaultPP, PP (..))
+import XMonad.Hooks.DynamicLog
+--import XMonad.Hooks.DynamicLog (dynamicLogWithPP, defaultPP, PP (..))
 import XMonad.Hooks.EwmhDesktops (ewmh)
-import XMonad.Hooks.ManageDocks (avoidStruts, manageDocks, ToggleStruts (..))
-import XMonad.Hooks.ManageHelpers (doFullFloat, doRectFloat)
+import XMonad.Hooks.ManageDocks
+--import XMonad.Hooks.ManageDocks (avoidStruts, manageDocks, ToggleStruts (..))
+import XMonad.Hooks.ManageHelpers
+--import XMonad.Hooks.ManageHelpers (doFullFloat, doRectFloat)
 import XMonad.Layout.Circle (Circle (..))
+import XMonad.Layout.Gaps
+--import XMonad.Layout.NoBorders
 import XMonad.Layout.NoBorders (smartBorders, noBorders)
 import XMonad.Layout.PerWorkspace (onWorkspace)
 import XMonad.Layout.SimplestFloat (simplestFloat)
 import XMonad.StackSet (RationalRect (..), currentTag)
+import XMonad.Util.EZConfig(additionalKeys)
+import XMonad.Util.Run(spawnPipe)
 
 main :: IO ()
-main = xmonad $ ewmh $ defaultConfig
-    { terminal           = "gnome-terminal"
-    , modMask            = mod4Mask
-    , layoutHook         = myLayoutHook
-    , manageHook         = myManageHook
-    , keys               = \c -> myKeys c `M.union` keys defaultConfig c
-    }
+main = do
+    xmproc <- spawnPipe "/usr/bin/xmobar $HOME/.xmonad/xmobarrc"
+    xmonad (ewmh (
+               defaultConfig { terminal           = "gnome-terminal"
+                             , modMask            = mod4Mask
+                             , layoutHook         = myLayoutHook
+                             , manageHook         = myManageHook
+                             , logHook            = myLogHook xmproc
+                             , keys               = \c -> myKeys c `M.union` keys defaultConfig c
+                             }))
 
 myLayoutHook = noBorders $ avoidStruts $ layoutHook defaultConfig
 
@@ -39,7 +50,12 @@ onSpecial = composeAll
             -- per-window options, use `xprop' to learn window names and classes
             [ title =? "xclock"   --> doFloat
             ]
-            
+
+myLogHook xmproc = dynamicLogWithPP $ xmobarPP
+                        { ppOutput = hPutStrLn xmproc
+                        , ppTitle = xmobarColor "green" "" . shorten 50
+                        }
+
 -- A list of custom keys
 myKeys :: XConfig Layout -> Map (ButtonMask, KeySym) (X ())
 myKeys (XConfig {modMask = myModMask}) = M.fromList $
