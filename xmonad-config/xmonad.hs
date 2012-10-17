@@ -1,5 +1,5 @@
 {-# LANGUAGE FlexibleContexts, Rank2Types #-}
-
+-- My xmonad configuration file
 module Main where
 
 import Data.Map (Map)
@@ -13,7 +13,7 @@ import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Hooks.ManageDocks (avoidStruts, manageDocks, ToggleStruts (..))
 import XMonad.Hooks.ManageHelpers (doFullFloat, doRectFloat)
 import XMonad.Layout.Circle (Circle (..))
-import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.NoBorders (smartBorders, noBorders)
 import XMonad.Layout.PerWorkspace (onWorkspace)
 import XMonad.Layout.SimplestFloat (simplestFloat)
 import XMonad.StackSet (RationalRect (..), currentTag)
@@ -22,49 +22,34 @@ main :: IO ()
 main = xmonad $ ewmh $ defaultConfig
     { terminal           = "gnome-terminal"
     , modMask            = mod4Mask
---    , manageHook         = myManageHook
---    , layoutHook         = myLayoutHook
---    , workspaces         = ["Work", "View", "Float", "Play"]
-    , borderWidth        = 2
-    , normalBorderColor  = "#22222"
-    , focusedBorderColor = "#688cb3"
+    , layoutHook         = myLayoutHook
+    , manageHook         = myManageHook
     , keys               = \c -> myKeys c `M.union` keys defaultConfig c
     }
 
--- | Layout hook
-myLayoutHook = smartBorders $ avoidStruts
-    $ onWorkspace "Work" (Mirror tiled ||| tiled ||| Full)
-    $ onWorkspace "View" (Mirror tiled ||| tiled ||| Full)
-    $ onWorkspace "Play" (Mirror tiled ||| tiled ||| Circle)
-    $ onWorkspace "Float" simplestFloat
-    $ Full
-  where
-    tiled = Tall nmaster delta ratio
-    nmaster = 1
-    delta = 3/100
-    ratio = 1/2
+myLayoutHook = noBorders $ avoidStruts $ layoutHook defaultConfig
 
--- | Manage hook
 myManageHook :: ManageHook
-myManageHook =   manageDocks <+> manageHook defaultConfig
-             <+> (onFloatingWorkSpace --> doFloat)
+myManageHook = manageDocks
+               <+> manageHook defaultConfig
+               <+> onSpecial
 
--- | Check if a window is on a floating space
-onFloatingWorkSpace :: Query Bool
-onFloatingWorkSpace = liftX $
-    withWindowSet (return . (`elem` floating) . currentTag)
-  where
-    floating = ["Float"]
-
+-- |
+onSpecial = composeAll
+            -- per-window options, use `xprop' to learn window names and classes
+            [ title =? "xclock"   --> doFloat
+            ]
+            
 -- A list of custom keys
 myKeys :: XConfig Layout -> Map (ButtonMask, KeySym) (X ())
 myKeys (XConfig {modMask = myModMask}) = M.fromList $
-    [ -- browser and file manager with FX
-      ((myModMask, xK_F1), spawn "google-chrome")
+    [ ((myModMask, xK_F1), spawn "google-chrome")
     , ((myModMask, xK_F2), spawn "firefox")
     , ((myModMask, xK_F3), spawn "emacs")      
     , ((myModMask, xK_F4), spawn "thunar")
     -- , ((myModMask, xK_F8), spawn "nautilus --no-desktop --browser")
+
+    , ((myModMask .|. shiftMask, xK_l), spawn "xscreensaver-command --lock")
 
       -- launcher keys
     , ((myModMask, xK_p), spawn "gmrun")
@@ -87,6 +72,7 @@ myKeys (XConfig {modMask = myModMask}) = M.fromList $
     , ((myModMask, xK_Right), nextWS)
     , ((myModMask .|. shiftMask, xK_Left), shiftToPrev >> prevWS)
     , ((myModMask .|. shiftMask, xK_Right), shiftToNext >> nextWS)
+
     ]
   where
     -- Function to fullFloat a window
