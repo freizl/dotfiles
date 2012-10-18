@@ -1,33 +1,36 @@
-{-# LANGUAGE FlexibleContexts, Rank2Types #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE Rank2Types       #-}
 -- | My xmonad configuration file
 -- config template: http://www.haskell.org/haskellwiki/Xmonad/Config_archive/Template_xmonad.hs_%280.9%29
 
 module Main where
 
-import Data.Map (Map)
-import qualified Data.Map as M
-import Data.Monoid (appEndo)
+import           Data.Map                    (Map)
+import qualified Data.Map                    as M
+import           Data.Monoid                 (appEndo)
 
-import System.IO
-import XMonad
-import XMonad.Actions.CycleWS (nextWS, prevWS, shiftToNext, shiftToPrev)
-import XMonad.Hooks.DynamicLog
+import           System.IO
+import           XMonad
+import           XMonad.Actions.CycleWS      (nextWS, prevWS, shiftToNext,
+                                              shiftToPrev)
+import           XMonad.Hooks.DynamicLog
+import           XMonad.Hooks.EwmhDesktops   (ewmh)
+import           XMonad.Hooks.ManageDocks
+import           XMonad.Hooks.ManageHelpers
+import           XMonad.Layout.Circle        (Circle (..))
+import           XMonad.Layout.Gaps
+import           XMonad.Layout.Grid
+import           XMonad.Layout.NoBorders     (noBorders, smartBorders)
+import           XMonad.Layout.PerWorkspace  (onWorkspace)
+import           XMonad.Layout.SimplestFloat (simplestFloat)
+import           XMonad.StackSet             (RationalRect (..), currentTag)
+import           XMonad.Util.EZConfig        (additionalKeys)
+import           XMonad.Util.Run             (spawnPipe)
+
 --import XMonad.Hooks.DynamicLog (dynamicLogWithPP, defaultPP, PP (..))
-import XMonad.Hooks.EwmhDesktops (ewmh)
-import XMonad.Hooks.ManageDocks
---import XMonad.Hooks.ManageDocks (avoidStruts, manageDocks, ToggleStruts (..))
-import XMonad.Hooks.ManageHelpers
---import XMonad.Hooks.ManageHelpers (doFullFloat, doRectFloat)
-import XMonad.Layout.Circle (Circle (..))
-import XMonad.Layout.Gaps
 --import XMonad.Layout.NoBorders
-import XMonad.Layout.NoBorders (smartBorders, noBorders)
-import XMonad.Layout.PerWorkspace (onWorkspace)
-import XMonad.Layout.SimplestFloat (simplestFloat)
-import XMonad.Layout.Grid
-import XMonad.StackSet (RationalRect (..), currentTag)
-import XMonad.Util.EZConfig(additionalKeys)
-import XMonad.Util.Run(spawnPipe)
+--import XMonad.Hooks.ManageHelpers (doFullFloat, doRectFloat)
+--import XMonad.Hooks.ManageDocks (avoidStruts, manageDocks, ToggleStruts (..))
 
 main :: IO ()
 main = do
@@ -46,6 +49,7 @@ main = do
 --   Circle
 myLayoutHook = noBorders $ avoidStruts
     $ onWorkspace "1:Web" (Full ||| tiled ||| Mirror tiled)
+    $ onWorkspace "7" (Circle)
     $ onWorkspace "8" (Grid)
     $ onWorkspace "9:Float" simplestFloat
     $ (tiled ||| Mirror tiled ||| Full)
@@ -63,6 +67,7 @@ myManageHook = manageDocks
 onSpecial = composeAll
             -- per-window options, use `xprop' to learn window names and classes
             [ title =? "xclock"   --> doFloat
+            , title =? "xeyes"    --> doFloat
             ]
 
 myLogHook xmproc = dynamicLogWithPP $ xmobarPP
@@ -75,7 +80,7 @@ myKeys :: XConfig Layout -> Map (ButtonMask, KeySym) (X ())
 myKeys (XConfig {modMask = myModMask}) = M.fromList $
     [ ((myModMask, xK_F1), spawn "google-chrome")
     , ((myModMask, xK_F2), spawn "firefox")
-    , ((myModMask, xK_F3), spawn "emacs")      
+    , ((myModMask, xK_F3), spawn "emacs")
     , ((myModMask, xK_F4), spawn "thunar")
     -- , ((myModMask, xK_F8), spawn "nautilus --no-desktop --browser")
 
