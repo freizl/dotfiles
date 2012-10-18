@@ -24,6 +24,7 @@ import XMonad.Layout.Gaps
 import XMonad.Layout.NoBorders (smartBorders, noBorders)
 import XMonad.Layout.PerWorkspace (onWorkspace)
 import XMonad.Layout.SimplestFloat (simplestFloat)
+import XMonad.Layout.Grid
 import XMonad.StackSet (RationalRect (..), currentTag)
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Util.Run(spawnPipe)
@@ -34,14 +35,25 @@ main = do
     xmonad (ewmh (
                defaultConfig { terminal           = "gnome-terminal"
                              , modMask            = mod4Mask
+                             , workspaces         = ["1:Web", "2", "3", "4", "5", "6", "7", "8", "9:Float"]
                              , layoutHook         = myLayoutHook
                              , manageHook         = myManageHook
                              , logHook            = myLogHook xmproc
                              , keys               = \c -> myKeys c `M.union` keys defaultConfig c
                              }))
 
-myLayoutHook = noBorders $ avoidStruts $ layoutHook defaultConfig
-
+-- | TODO add space when grid layout
+--   Circle
+myLayoutHook = noBorders $ avoidStruts
+    $ onWorkspace "1:Web" (Full ||| tiled ||| Mirror tiled)
+    $ onWorkspace "8" (Grid)
+    $ onWorkspace "9:Float" simplestFloat
+    $ (tiled ||| Mirror tiled ||| Full)
+  where
+    tiled = Tall nmaster delta ratio
+    nmaster = 1
+    delta = 3/100
+    ratio = 1/2
 myManageHook :: ManageHook
 myManageHook = manageDocks
                <+> manageHook defaultConfig
