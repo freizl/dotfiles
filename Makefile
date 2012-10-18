@@ -23,7 +23,7 @@ echo:
 init:
 	apt-get install git haskell-platform emacs make
 	apt-get install lightdm zsh w3m
-	#apt-get install tmux
+	#apt-get install tmux proxychains
 
 vbox:
 	if [ ! -d "/media/cdrom"] then
