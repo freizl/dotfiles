@@ -7,6 +7,7 @@ GIT_SSH=git@github.com:freizl
 HCN_SSH=git@github.com:HaskellCNOrg
 
 XMONAD=xmonad-config
+TOP := $(shell pwd)
 
 ### NOTES: some scripts not be tested!!!
 
@@ -33,18 +34,18 @@ vbox:
 	cd /media/cdrom && sudo VBOXxxx.sh
 
 xmonad:
-	apt-get install xmonad suckless-tools gmrun xmobar
-	apt-get install lxappearance thunar
+	sudo apt-get install xmonad suckless-tools gmrun xmobar
+	sudo apt-get install lxappearance thunar
 	#apt-get install ttf-liberation ttf-mscorefonts-installer
-
-	cp /usr/share/xsessions/xmonad.desktop  /usr/share/xsessions/xmonad.desktop.org
-	cp $(XMONAD)/xmonad.desktop /usr/share/xsessions/
-	cp /usr/share/gnome-session/sessions/xmonad.session /usr/share/gnome-session/sessions/xmonad.session.org
-	cp $(XMONAD)/xmonad.session /usr/share/gnome-session/sessions/
-	cp $(XMONAD)/xmonad.start /usr/local/bin
-	chmod +x /usr/local/bin/xmonad.start
-	mkdir ~/.xmonad
-	ln -s $(XMONAD)/xmonad.hs ~/.xmonad/xmonad.hs
+	sudo cp /usr/share/xsessions/xmonad.desktop  /usr/share/xsessions/xmonad.desktop.org
+	sudo cp $(XMONAD)/xmonad.desktop /usr/share/xsessions/
+	sudo cp /usr/share/gnome-session/sessions/xmonad.session /usr/share/gnome-session/sessions/xmonad.session.org
+	sudo cp $(XMONAD)/xmonad.session /usr/share/gnome-session/sessions/
+	sudo cp $(XMONAD)/xmonad.start /usr/local/bin
+	sudo chmod +x /usr/local/bin/xmonad.start
+	mkdir -p ~/.xmonad
+	ln -s -f $(TOP)/$(XMONAD)/xmonad.hs ~/.xmonad/
+	ln -s -f $(TOP)/$(XMONAD)/xmobarrc ~/.xmonad/
 	cabal install xmonad-contrib
 
 ####################

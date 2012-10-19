@@ -2,12 +2,18 @@
 
 ###
 setxkbmap dvorak -option ctrl:swapcaps -option ctrl:nocaps
-gnome-session --session=xmonad
-  ## config start via gnome-session-properties 
+
+emacs --daemon
+gnome-terminal &
 
 ###
 #xmodmap -e 'add mod5 = Hyper_R'
 #xmodmap -e 'add Control = Control_L'
 
-###
 exec xmonad
+
+###
+### have problew with gnome-session, shortcuts or sth..
+### gnome-session --session=xmonad
+###
+
