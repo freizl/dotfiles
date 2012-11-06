@@ -20,6 +20,7 @@ import           XMonad.Hooks.ManageHelpers
 import           XMonad.Layout.Circle        (Circle (..))
 import           XMonad.Layout.Gaps
 import           XMonad.Layout.Grid
+import           XMonad.Layout.Spacing
 import           XMonad.Layout.NoBorders     (noBorders, smartBorders)
 import           XMonad.Layout.PerWorkspace  (onWorkspace)
 import           XMonad.Layout.SimplestFloat (simplestFloat)
@@ -27,30 +28,38 @@ import           XMonad.StackSet             (RationalRect (..), currentTag)
 import           XMonad.Util.EZConfig        (additionalKeys)
 import           XMonad.Util.Run             (spawnPipe)
 
---import XMonad.Hooks.DynamicLog (dynamicLogWithPP, defaultPP, PP (..))
---import XMonad.Layout.NoBorders
---import XMonad.Hooks.ManageHelpers (doFullFloat, doRectFloat)
---import XMonad.Hooks.ManageDocks (avoidStruts, manageDocks, ToggleStruts (..))
-
 main :: IO ()
 main = do
     xmproc <- spawnPipe "/usr/bin/xmobar $HOME/.xmonad/xmobarrc"
     xmonad (ewmh (
                defaultConfig { terminal           = "gnome-terminal"
                              , modMask            = mod4Mask
-                             , workspaces         = ["1:Web", "2", "3", "4", "5", "6", "7", "8", "9:Float"]
+                             , workspaces         = ["1:Web", "2:Edit", "3:Mail", "4:Chat", "5", "6", "7", "8", "9:Float"]
                              , layoutHook         = myLayoutHook
                              , manageHook         = myManageHook
                              , logHook            = myLogHook xmproc
                              , keys               = \c -> myKeys c `M.union` keys defaultConfig c
                              }))
 
+-- | Workspaces
+--
+myWorkspaces = []
+
+wsChat :: String
+wsChat = "4:Chat"
+
+wsWeb :: String
+wsWeb = "1:Web"
+
+wsMail :: String
+wsMail = "3:Mail"
+
 -- | TODO add space when grid layout
 --   Circle
 myLayoutHook = noBorders $ avoidStruts
     $ onWorkspace "1:Web" (Full ||| tiled ||| Mirror tiled)
-    $ onWorkspace "7" (Circle)
-    $ onWorkspace "8" (Grid)
+    $ onWorkspace "3:Mail" (spacing 5 Grid ||| Full)
+    $ onWorkspace "4:Chat" (Circle)
     $ onWorkspace "9:Float" simplestFloat
     $ (tiled ||| Mirror tiled ||| Full)
   where
@@ -66,8 +75,9 @@ myManageHook = manageDocks
 -- |
 onSpecial = composeAll
             -- per-window options, use `xprop' to learn window names and classes
-            [ title =? "xclock"   --> doFloat
-            , title =? "xeyes"    --> doFloat
+            [ title =? "xclock"     --> doFloat
+            , title =? "xeyes"      --> doFloat
+            , className =? "skype"  --> doShift wsChat
             ]
 
 myLogHook xmproc = dynamicLogWithPP $ xmobarPP
