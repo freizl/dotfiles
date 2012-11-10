@@ -34,7 +34,7 @@ main = do
     xmonad (ewmh (
                defaultConfig { terminal           = "gnome-terminal"
                              , modMask            = mod4Mask
-                             , workspaces         = ["1:Web", "2:Edit", "3:Mail", "4:Chat", "5", "6", "7", "8", "9:Float"]
+                             , workspaces         = myWorkspaces
                              , layoutHook         = myLayoutHook
                              , manageHook         = myManageHook
                              , logHook            = myLogHook xmproc
@@ -43,30 +43,30 @@ main = do
 
 -- | Workspaces
 --
-myWorkspaces = []
+myWorkspaces :: [String]
+myWorkspaces = [wsWeb, wsEdit, wsMail, wsChat, "5", "6", "7", "8", "9", wsTest]
 
-wsChat :: String
-wsChat = "4:Chat"
-
-wsWeb :: String
+wsTest, wsMail, wsWeb, wsChat :: String
 wsWeb = "1:Web"
-
-wsMail :: String
+wsEdit = "2:Edit"
 wsMail = "3:Mail"
+wsChat = "4:Chat"
+wsTest = "0:Test"
 
--- | TODO add space when grid layout
---   Circle
+
 myLayoutHook = noBorders $ avoidStruts
-    $ onWorkspace "1:Web" (Full ||| tiled ||| Mirror tiled)
-    $ onWorkspace "3:Mail" (spacing 5 Grid ||| Full)
-    $ onWorkspace "4:Chat" (Circle)
-    $ onWorkspace "9:Float" simplestFloat
+    $ onWorkspace wsWeb (Full ||| tiled ||| Mirror tiled)
+    $ onWorkspace wsMail (spacing 5 Grid ||| Full)
+    $ onWorkspace wsChat (Circle)
+    $ onWorkspace wsTest simplestFloat
     $ (tiled ||| Mirror tiled ||| Full)
   where
     tiled = Tall nmaster delta ratio
     nmaster = 1
     delta = 3/100
     ratio = 1/2
+
+
 myManageHook :: ManageHook
 myManageHook = manageDocks
                <+> manageHook defaultConfig
@@ -78,6 +78,7 @@ onSpecial = composeAll
             [ title =? "xclock"     --> doFloat
             , title =? "xeyes"      --> doFloat
             , className =? "skype"  --> doShift wsChat
+            , className =? "emacs"  --> doShift wsEdit
             ]
 
 myLogHook xmproc = dynamicLogWithPP $ xmobarPP
