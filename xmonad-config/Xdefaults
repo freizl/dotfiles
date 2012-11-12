@@ -1,0 +1,26 @@
+##
+## put those config to ~/.Xdefaults 
+##
+
+##
+## more detail here: http://pod.tst.eu/http://cvs.schmorp.de/rxvt-unicode/doc/rxvt.7.pod#Terminal_Configuration
+##
+
+URxvt.cutchars: "()*,<>[]{}|'
+URxvt.print-pipe: cat >/tmp/xxx
+##URxvt.background:       #FFFFFF
+##URxvt.foreground:       gray90
+##URxvt.color7:           gray90
+##URxvt.colorBD:          #ffffff
+##URxvt.cursorColor:      #e0e080
+##URxvt.throughColor:     #8080f0
+URxvt.highlightColor:   #f0f0f0
+urxvt.font:             9x15bold,\
+                        -misc-fixed-bold-r-normal--15-140-75-75-c-90-iso10646-1,\
+                        -misc-fixed-medium-r-normal--15-140-75-75-c-90-iso10646-1, \
+                        [codeset=JISX0208]xft:Kochi Gothic, \
+                        xft:Bitstream Vera Sans Mono:autohint=true, \
+                        xft:Code2000:antialias=false
+urxvt.boldFont:         -xos4-terminus-bold-r-normal--14-140-72-72-c-80-iso8859-15
+urxvt.italicFont:       xft:Bitstream Vera Sans Mono:italic:autohint=true
+urxvt.boldItalicFont:   xft:Bitstream Vera Sans Mono:bold:italic:autohint=true
