@@ -1,12 +1,8 @@
 #! /bin/bash
 
-###
 setxkbmap dvorak -option ctrl:swapcaps -option ctrl:nocaps
-
-emacs --daemon
-urxvt -pe tabbed
-#gnome-terminal &
-
+emacs --daemon &
+urxvtd &
 exec xmonad
 
 ###
@@ -18,3 +14,5 @@ exec xmonad
 #xmodmap -e 'add mod5 = Hyper_R'
 #xmodmap -e 'add Control = Control_L'
 ###
+
+#gnome-terminal &
