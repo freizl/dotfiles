@@ -90,7 +90,7 @@ myKeys :: XConfig Layout -> Map (ButtonMask, KeySym) (X ())
 myKeys (XConfig {modMask = myModMask}) = M.fromList $
     [ ((myModMask, xK_F1), spawn "google-chrome")
     , ((myModMask, xK_F2), spawn "firefox")
-    , ((myModMask, xK_F3), spawn "emacs")
+    , ((myModMask, xK_F3), spawn "emacsclient -c")
     , ((myModMask, xK_F4), spawn "thunar")
     -- , ((myModMask, xK_F8), spawn "nautilus --no-desktop --browser")
 

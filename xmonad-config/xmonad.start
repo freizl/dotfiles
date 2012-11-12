@@ -4,11 +4,8 @@
 setxkbmap dvorak -option ctrl:swapcaps -option ctrl:nocaps
 
 emacs --daemon
-gnome-terminal &
-
-###
-#xmodmap -e 'add mod5 = Hyper_R'
-#xmodmap -e 'add Control = Control_L'
+urxvt -pe tabbed
+#gnome-terminal &
 
 exec xmonad
 
@@ -17,3 +14,7 @@ exec xmonad
 ### gnome-session --session=xmonad
 ###
 
+###
+#xmodmap -e 'add mod5 = Hyper_R'
+#xmodmap -e 'add Control = Control_L'
+###
