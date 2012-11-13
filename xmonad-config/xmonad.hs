@@ -32,7 +32,7 @@ main :: IO ()
 main = do
     xmproc <- spawnPipe "/usr/bin/xmobar $HOME/.xmonad/xmobarrc"
     xmonad (ewmh (
-               defaultConfig { terminal           = "urxvt -pe tabbed"
+               defaultConfig { terminal           = "urxvtc -pe tabbed"
                              , modMask            = mod4Mask
                              , workspaces         = myWorkspaces
                              , layoutHook         = myLayoutHook
