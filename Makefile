@@ -33,6 +33,13 @@ vbox:
 	mount /dev/cdrom /media/cdrom
 	cd /media/cdrom && sudo VBOXxxx.sh
 
+###
+### for centos, 
+### `cabal install xmonad xmonad-contrib xmobar`
+### ln the executor to /usr/bin
+### install `gmrun` via source code
+###
+
 xmonad:
 	sudo apt-get install xmonad suckless-tools gmrun xmobar
 	sudo apt-get install lxappearance thunar
