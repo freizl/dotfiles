@@ -17,6 +17,7 @@ import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.EwmhDesktops   (ewmh)
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.ManageHelpers
+import           XMonad.Hooks.SetWMName
 import           XMonad.Layout.Circle        (Circle (..))
 import           XMonad.Layout.Gaps
 import           XMonad.Layout.Grid
@@ -37,7 +38,7 @@ main = do
                              , workspaces         = myWorkspaces
                              , layoutHook         = myLayoutHook
                              , manageHook         = myManageHook
-                             , logHook            = myLogHook xmproc
+                             , logHook            = myLogHook xmproc >> setWMName "LG3D"
                              , keys               = \c -> myKeys c `M.union` keys defaultConfig c
                              }))
 
