@@ -29,6 +29,9 @@ import           XMonad.StackSet             (RationalRect (..), currentTag)
 import           XMonad.Util.EZConfig        (additionalKeys)
 import           XMonad.Util.Run             (spawnPipe)
 
+-- | find proper mod key
+--   `xmodmap`, `xkeycaps`, `xev`
+--
 main :: IO ()
 main = do
     xmproc <- spawnPipe "/usr/bin/xmobar $HOME/.xmonad/xmobarrc"
