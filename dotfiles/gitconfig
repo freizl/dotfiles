@@ -4,11 +4,18 @@
 [alias]
 	ci = commit -m
 	cia = commit -a -m
-	glog = log --graph
-	st = status
+	logg = log --graph
+	logs = log --oneline --decorate
+	st = status -sb
+	stn = status -uno -sb
+	df = diff --word-diff
 	br = branch
 	co = checkout
+	re = remote
 [help]
 	autocorrect = 1
 [color]
 	ui = true
+[push]
+	default = tracking
+
