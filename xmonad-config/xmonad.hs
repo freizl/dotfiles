@@ -36,7 +36,8 @@ main :: IO ()
 main = do
     xmproc <- spawnPipe "/usr/bin/xmobar $HOME/.xmonad/xmobarrc"
     xmonad (ewmh (
-               defaultConfig { terminal           = "urxvtc -pe tabbed"
+               defaultConfig { terminal           = "gnome-terminal"
+                             -- terminal           = "urxvtc -pe tabbed"
                              , modMask            = mod4Mask
                              , workspaces         = myWorkspaces
                              , layoutHook         = myLayoutHook
@@ -48,20 +49,21 @@ main = do
 -- | Workspaces
 --
 myWorkspaces :: [String]
-myWorkspaces = [wsWeb, wsEdit, wsMail, wsChat, "5", "6", "7", "8", "9", wsTest]
+myWorkspaces = [wsEdit, wsWeb, wsChat, "4", "5", "6", "7", wsMisc, wsTest]
 
-wsTest, wsMail, wsWeb, wsChat :: String
-wsWeb = "1:Web"
-wsEdit = "2:Edit"
-wsMail = "3:Mail"
-wsChat = "4:Chat"
-wsTest = "0:Test"
+wsTest, wsWeb, wsChat :: String
+wsEdit = "1:Edit"
+wsWeb = "2:Web"
+wsChat = "3:Chat"
+wsMisc = "8:Misc"
+wsTest = "9:Test"
 
 
 myLayoutHook = noBorders $ avoidStruts
+    $ onWorkspace wsEdit (Full ||| tiled ||| Mirror tiled)
     $ onWorkspace wsWeb (Full ||| tiled ||| Mirror tiled)
-    $ onWorkspace wsMail (spacing 5 Grid ||| Full)
-    $ onWorkspace wsChat (Circle)
+    $ onWorkspace wsChat (spacing 5 Grid ||| Full)
+    $ onWorkspace wsMisc (Circle)
     $ onWorkspace wsTest simplestFloat
     $ (tiled ||| Mirror tiled ||| Full)
   where
@@ -94,9 +96,10 @@ myLogHook xmproc = dynamicLogWithPP $ xmobarPP
 myKeys :: XConfig Layout -> Map (ButtonMask, KeySym) (X ())
 myKeys (XConfig {modMask = myModMask}) = M.fromList $
     [ ((myModMask, xK_F1), spawn "google-chrome")
-    , ((myModMask, xK_F2), spawn "firefox")
-    , ((myModMask, xK_F3), spawn "emacsclient -c")
-    , ((myModMask, xK_F4), spawn "thunar")
+    , ((myModMask, xK_F2), spawn "emacsclient -c")
+    , ((myModMask, xK_F3), spawn "firefox")
+    , ((myModMask, xK_F4), spawn "chromium-browser")
+    , ((myModMask, xK_F5), spawn "thunar")
     -- , ((myModMask, xK_F8), spawn "nautilus --no-desktop --browser")
 
     , ((myModMask .|. shiftMask, xK_l), spawn "xscreensaver-command --lock")
