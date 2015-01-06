@@ -27,7 +27,7 @@ import           XMonad.Layout.PerWorkspace  (onWorkspace)
 import           XMonad.Layout.SimplestFloat (simplestFloat)
 import           XMonad.StackSet             (RationalRect (..), currentTag)
 import qualified XMonad.StackSet as W
-import           XMonad.Util.EZConfig        (additionalKeys, removeKeysP)
+import           XMonad.Util.EZConfig        (additionalKeys, removeKeys)
 import           XMonad.Util.Run             (spawnPipe)
 
 -- | find proper mod key
@@ -36,18 +36,18 @@ import           XMonad.Util.Run             (spawnPipe)
 main :: IO ()
 main = do
     xmproc <- spawnPipe "/usr/bin/xmobar $HOME/.xmonad/xmobarrc"
-    xmonad (ewmh (
-               defaultConfig { terminal           = "gnome-terminal"
-                             -- terminal           = "urxvtc -pe tabbed"
-                             , modMask            = mod4Mask
-                             , workspaces         = myWorkspaces
-                             , layoutHook         = myLayoutHook
-                             , manageHook         = myManageHook
-                             , logHook            = myLogHook xmproc >> setWMName "LG3D"
-                             , keys               = \c -> myKeys c `M.union` keys defaultConfig c
-                             }
-               `removeKeysP` ["S-j", "S-k", "S-n", "S-m"]
-               ))
+    xmonad
+      $ ewmh
+      $ clearConflictKeys
+      $ defaultConfig { terminal           = "gnome-terminal"
+                         -- terminal           = "urxvtc -pe tabbed"
+                      , modMask            = mod4Mask
+                      , workspaces         = myWorkspaces
+                      , layoutHook         = myLayoutHook
+                      , manageHook         = myManageHook
+                      , logHook            = myLogHook xmproc >> setWMName "LG3D"
+                      , keys               = \c -> myKeys c `M.union` keys defaultConfig c
+                      }
 
 -- | Workspaces
 --
@@ -96,6 +96,14 @@ myLogHook xmproc = dynamicLogWithPP $ xmobarPP
                         }
 
 -- A list of custom keys
+clearConflictKeys :: XConfig a -> XConfig a
+clearConflictKeys cf@(XConfig {modMask = myModMask}) =
+  removeKeys cf [ (myModMask, xK_n)
+                , (myModMask, xK_m)
+                , (myModMask, xK_j)
+                , (myModMask, xK_k)
+                ]
+
 myKeys :: XConfig Layout -> Map (ButtonMask, KeySym) (X ())
 myKeys (XConfig {modMask = myModMask}) = M.fromList $
     [ ((myModMask, xK_F1), spawn "google-chrome")
