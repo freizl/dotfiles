@@ -26,7 +26,8 @@ import           XMonad.Layout.NoBorders     (noBorders, smartBorders)
 import           XMonad.Layout.PerWorkspace  (onWorkspace)
 import           XMonad.Layout.SimplestFloat (simplestFloat)
 import           XMonad.StackSet             (RationalRect (..), currentTag)
-import           XMonad.Util.EZConfig        (additionalKeys)
+import qualified XMonad.StackSet as W
+import           XMonad.Util.EZConfig        (additionalKeys, removeKeysP)
 import           XMonad.Util.Run             (spawnPipe)
 
 -- | find proper mod key
@@ -44,7 +45,9 @@ main = do
                              , manageHook         = myManageHook
                              , logHook            = myLogHook xmproc >> setWMName "LG3D"
                              , keys               = \c -> myKeys c `M.union` keys defaultConfig c
-                             }))
+                             }
+               `removeKeysP` ["S-j", "S-k", "S-n", "S-m"]
+               ))
 
 -- | Workspaces
 --
@@ -112,13 +115,16 @@ myKeys (XConfig {modMask = myModMask}) = M.fromList $
     , ((myModMask, xK_a), sendMessage ToggleStruts)
 
       -- Close window
-    , ((myModMask, xK_c), kill)
+    -- , ((myModMask, xK_c), kill)
 
-      -- Full float
-    , ((myModMask, xK_f), fullFloatFocused)
+      -- focus to master win
+      , ((myModMask .|. shiftMask, xK_m), windows W.focusMaster)
+
+        -- Full float
+     , ((myModMask .|. shiftMask, xK_f), fullFloatFocused)
 
       -- Centered rectangle float
-    , ((myModMask, xK_r), rectFloatFocused)
+     , ((myModMask .|. shiftMask, xK_r), rectFloatFocused)
 
       -- Next & previous workspace
     , ((myModMask, xK_Left), prevWS)
