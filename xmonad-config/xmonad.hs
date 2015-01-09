@@ -65,7 +65,7 @@ wsTest = "9:Test"
 myLayoutHook = noBorders $ avoidStruts
     $ onWorkspace wsEdit (Full ||| tiled ||| Mirror tiled)
     $ onWorkspace wsWeb (Full ||| tiled ||| Mirror tiled)
-    $ onWorkspace wsChat (spacing 5 Grid ||| Full)
+    $ onWorkspace wsChat (spacing 5 Grid ||| tiled ||| Mirror tiled ||| Full)
     $ onWorkspace wsMisc (Circle)
     $ onWorkspace wsTest simplestFloat
     $ (tiled ||| Mirror tiled ||| Full)
@@ -102,6 +102,7 @@ clearConflictKeys cf@(XConfig {modMask = myModMask}) =
                 , (myModMask, xK_m)
                 , (myModMask, xK_j)
                 , (myModMask, xK_k)
+                , (myModMask, xK_r)
                 ]
 
 myKeys :: XConfig Layout -> Map (ButtonMask, KeySym) (X ())
