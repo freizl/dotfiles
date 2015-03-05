@@ -1,6 +1,6 @@
-`sudo apt-get install xmonad suckless-tools gmrun xmobar`
+`sudo apt-get install xmonad suckless-tools gmrun xmobar cabal-install`
 `sudo apt-get install lxappearance ttf-liberation ttf-mscorefonts-installer`
-
+libghc-xmonad-contrib-dev scrot
 ## Reference
 
 - <http://paddymullen.com/2010/01/17/xmonad-on-ubuntu/>

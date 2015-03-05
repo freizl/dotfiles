@@ -1,6 +1,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE Rank2Types       #-}
 -- | My xmonad configuration file
+
 -- config template: http://www.haskell.org/haskellwiki/Xmonad/Config_archive/Template_xmonad.hs_%280.9%29
 
 module Main where
@@ -21,12 +22,12 @@ import           XMonad.Hooks.SetWMName
 import           XMonad.Layout.Circle        (Circle (..))
 import           XMonad.Layout.Gaps
 import           XMonad.Layout.Grid
-import           XMonad.Layout.Spacing
 import           XMonad.Layout.NoBorders     (noBorders, smartBorders)
 import           XMonad.Layout.PerWorkspace  (onWorkspace)
 import           XMonad.Layout.SimplestFloat (simplestFloat)
+import           XMonad.Layout.Spacing
 import           XMonad.StackSet             (RationalRect (..), currentTag)
-import qualified XMonad.StackSet as W
+import qualified XMonad.StackSet             as W
 import           XMonad.Util.EZConfig        (additionalKeys, removeKeys)
 import           XMonad.Util.Run             (spawnPipe)
 
@@ -52,23 +53,22 @@ main = do
 -- | Workspaces
 --
 myWorkspaces :: [String]
-myWorkspaces = [wsEdit, wsWeb, wsChat, "4", "5", "6", "7", wsMisc, wsTest]
+myWorkspaces = [wsEdit, wsTerm, wsChat, wsTest] ++ map show ([4..9] :: [Int])
 
-wsTest, wsWeb, wsChat :: String
+wsEdit, wsTerm, wsChat, wsTest :: String
 wsEdit = "1:Edit"
-wsWeb = "2:Web"
+wsTerm = "2:Term"
 wsChat = "3:Chat"
-wsMisc = "8:Misc"
-wsTest = "9:Test"
+wsTest = "4:Test"
 
 
 myLayoutHook = noBorders $ avoidStruts
     $ onWorkspace wsEdit (Full ||| tiled ||| Mirror tiled)
-    $ onWorkspace wsWeb (Full ||| tiled ||| Mirror tiled)
-    $ onWorkspace wsChat (spacing 5 Grid ||| tiled ||| Mirror tiled ||| Full)
-    $ onWorkspace wsMisc (Circle)
-    $ onWorkspace wsTest simplestFloat
-    $ (tiled ||| Mirror tiled ||| Full)
+    -- $ onWorkspace wsTerm (Full ||| tiled ||| Mirror tiled)
+    $ onWorkspace wsChat (Full ||| tiled ||| Mirror tiled)
+    -- $ onWorkspace wsMisc (Circle)
+    -- $ onWorkspace wsTest simplestFloat
+    $ onWorkspace wsTest (tiled ||| Mirror tiled ||| Full) tiled
   where
     tiled = Tall nmaster delta ratio
     nmaster = 1
@@ -86,8 +86,7 @@ onSpecial = composeAll
             -- per-window options, use `xprop' to learn window names and classes
             [ title =? "xclock"     --> doFloat
             , title =? "xeyes"      --> doFloat
-            , className =? "skype"  --> doShift wsChat
-            , className =? "emacs"  --> doShift wsEdit
+            -- , className =? "skype"  --> doShift wsChat
             ]
 
 myLogHook xmproc = dynamicLogWithPP $ xmobarPP
@@ -106,19 +105,20 @@ clearConflictKeys cf@(XConfig {modMask = myModMask}) =
                 ]
 
 myKeys :: XConfig Layout -> Map (ButtonMask, KeySym) (X ())
-myKeys (XConfig {modMask = myModMask}) = M.fromList $
-    [ ((myModMask, xK_F1), spawn "google-chrome")
+myKeys (XConfig {modMask = myModMask}) = M.fromList
+    [
+      ((myModMask, xK_F1), spawn "chromium-browser")
     , ((myModMask, xK_F2), spawn "emacsclient -c")
-    , ((myModMask, xK_F3), spawn "firefox")
-    , ((myModMask, xK_F4), spawn "chromium-browser")
-    , ((myModMask, xK_F5), spawn "thunar")
-    -- , ((myModMask, xK_F8), spawn "nautilus --no-desktop --browser")
+    , ((myModMask, xK_F3), spawn "google-chrome")
+    , ((myModMask, xK_F4), spawn "firefox")
+    --, ((myModMask, xK_F5), spawn "thunar")
+    , ((myModMask, xK_F5), spawn "nautilus --browser")
 
     , ((myModMask .|. shiftMask, xK_l), spawn "xscreensaver-command --lock")
 
       -- launcher keys
     , ((myModMask, xK_p), spawn "gmrun")
-    , ((myModMask .|. shiftMask, xK_p), spawn "dmenu")
+    , ((myModMask .|. shiftMask, xK_p), spawn "dmenu-with-yeganeshdmenu")
 
       -- Toggle struts
     , ((myModMask, xK_a), sendMessage ToggleStruts)
@@ -140,6 +140,13 @@ myKeys (XConfig {modMask = myModMask}) = M.fromList $
     , ((myModMask, xK_Right), nextWS)
     , ((myModMask .|. shiftMask, xK_Left), shiftToPrev >> prevWS)
     , ((myModMask .|. shiftMask, xK_Right), shiftToNext >> nextWS)
+
+     -- XF86AudioLowerVolume
+    , ((0, 0x1008ff11), spawn "amixer set Master 10%-")
+      -- XF86AudioRaiseVolume
+    , ((0, 0x1008ff13), spawn "amixer set Master 10%+")
+      -- XF86AudioMute
+    , ((0, 0x1008ff12), spawn "amixer set Master toggle")
 
     ]
   where
