@@ -30,6 +30,7 @@ import           XMonad.StackSet             (RationalRect (..), currentTag)
 import qualified XMonad.StackSet             as W
 import           XMonad.Util.EZConfig        (additionalKeys, removeKeys)
 import           XMonad.Util.Run             (spawnPipe)
+import XMonad.Actions.UpdatePointer
 
 -- | find proper mod key
 --   `xmodmap`, `xkeycaps`, `xev`
@@ -46,7 +47,7 @@ main = do
                       , workspaces         = myWorkspaces
                       , layoutHook         = myLayoutHook
                       , manageHook         = myManageHook
-                      , logHook            = myLogHook xmproc >> setWMName "LG3D"
+                      , logHook            = myLogHook xmproc >> setWMName "LG3D" >> updatePointer (Relative 1 1)
                       , keys               = \c -> myKeys c `M.union` keys defaultConfig c
                       }
 

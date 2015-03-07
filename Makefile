@@ -1,4 +1,4 @@
-#################### 
+####################
 ### Misc Makefile
 ####################
 
@@ -34,7 +34,7 @@ vbox:
 	cd /media/cdrom && sudo VBOXxxx.sh
 
 ###
-### for centos, 
+### for centos,
 ### `cabal install xmonad xmonad-contrib xmobar`
 ### ln the executor to /usr/bin
 ### install `gmrun` via source code
@@ -81,4 +81,3 @@ githubclone:
 	cd ../ && $(GIT) clone $(HCN_SSH)/snaplet-i18n.git
 	cd ../ && $(GIT) clone $(HCN_SSH)/snap-web.git
 	cd ../ && $(GIT) clone $(HCN_SSH)/haskellcn.git
-
