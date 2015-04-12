@@ -54,14 +54,13 @@ main = do
 -- | Workspaces
 --
 myWorkspaces :: [String]
-myWorkspaces = [wsEdit, wsTerm, wsChat, wsTest] ++ map show ([4..9] :: [Int])
+myWorkspaces = [wsEdit, wsTerm, wsChat, wsTest] ++ map show ([5..9] :: [Int])
 
 wsEdit, wsTerm, wsChat, wsTest :: String
 wsEdit = "1:Edit"
 wsTerm = "2:Term"
 wsChat = "3:Chat"
 wsTest = "4:Test"
-
 
 myLayoutHook = noBorders $ avoidStruts
     $ onWorkspace wsEdit (Full ||| tiled ||| Mirror tiled)
