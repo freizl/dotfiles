@@ -1,6 +1,6 @@
 [user]
 	email = freizl@gmail.com
-	name = Haisheng.W.WU
+	name = Haisheng.Wu
 [alias]
 	ci = commit -m
 	cia = commit -a -m
@@ -21,4 +21,12 @@
 
 [core]
 	editor = vim
+
+[gui]
+        historybrowser = gitk
+        editor = gvim
+[diff]
+        tool = xxdiff
+[merge]
+        tool = xxdiff
 
