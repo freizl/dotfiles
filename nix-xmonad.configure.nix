@@ -2,10 +2,10 @@
 
 {
 
-
   system.autoUpgrade.enable = true;
 
   networking.networkmanager.enable = true;
+
   virtualisation.virtualbox.guest.enable = true;
 
   environment.systemPackages = with pkgs;
@@ -16,9 +16,9 @@
     git
     rxvt_unicode
     dmenu
-    #xmodmap
-    #gmrun
-    #xev
+    gmrun
+    xorg.xmodmap
+    xorg.xev
     haskellPackages.xmobar
   ];
 
@@ -39,7 +39,6 @@
     # Use the GRUB 2 boot loader.
     loader.grub = {
       enable = true;
-      #device = "/dev/disk/by-label/nixos";
       device = "/dev/sda";
     };
   };
@@ -51,16 +50,15 @@
       enable = true;
       layout = "us";
 
-      # displayManager =
-      # {
-      #   kdm.enable = true;
-      # };
-      #
-      # desktopManager =
-      # {
-      #   gnome3.enable = true;
-      #   default = "gnome3";
-      # };
+      displayManager =
+      {
+        kdm.enable = true;
+      };
+
+      desktopManager =
+      {
+        default = "none";
+      };
 
       windowManager.xmonad =
       {
@@ -73,6 +71,13 @@
         ];
       };
       windowManager.default = "xmonad";
+      displayManager.sessionCommands = with pkgs; lib.mkAfter
+      ''
+      setxkbmap dvorak
+      emacs --daemon &
+      urxvtd &
+      '';
+
     };
   };
 
